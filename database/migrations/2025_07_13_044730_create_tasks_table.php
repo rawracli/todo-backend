@@ -19,11 +19,10 @@ return new class extends Migration
             $table->binary('image')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('tag_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      */
