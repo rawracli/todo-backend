@@ -3,21 +3,27 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
-    public function users() : BelongsToMany {
-        return $this->belongsToMany(User::class);
+    protected $fillable = [
+        'user_id',
+        'plan_id',
+        'amount',
+        'status'
+    ];
+    public function users() : BelongsTo {
+        return $this->belongsTo(User::class);
     }
-    public function plans() : BelongsToMany {
-        return $this->belongsToMany(Plan::class);
+    public function plans() : BelongsTo {
+        return $this->belongsTo(Plan::class);
     }
-    public function invoices() : HasMany {
-        return $this->hasMany(Invoice::class);
+    public function invoice() : HasOne {
+        return $this->hasOne(Invoice::class);
     }
-    public function payments() : HasMany {
-        return $this->hasMany(Payment::class);
+    public function payment() : HasOne {
+        return $this->hasOne(Payment::class);
     }
 }

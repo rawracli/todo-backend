@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('sub_tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
+            $table->string('name');
             $table->text('description')->nullable();
-            $table->boolean('is_completed')->nullable()->default(false);
+            $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
             $table->foreignId('task_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

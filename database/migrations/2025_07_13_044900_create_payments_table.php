@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->timestamp('paid_at')->nullable();
-            $table->string('transaction_status');
+             $table->string('transaction_status')->nullable(); // capture, settlement, pending, deny, expire, cancel
+            $table->string('snap_token')->nullable(); // Midtrans Snap Token
             $table->timestamps();
         });
     }

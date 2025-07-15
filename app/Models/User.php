@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -23,6 +24,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
+        'plan_id',
+        'is_admin',
     ];
 
     /**
@@ -48,13 +52,13 @@ class User extends Authenticatable
         ];
     }
 
-    public function task():HasMany {
+    public function tasks():HasMany {
         return $this->hasMany(Task::class);
     }
-    public function order():HasMany {
+    public function orders():HasMany {
         return $this->hasMany(Order::class);
     }
-    public function plans() : BelongsToMany {
-        return $this->belongsToMany(Plan::class);
+    public function plans() : BelongsTo {
+        return $this->belongsTo(Plan::class);
     }
 }

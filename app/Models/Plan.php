@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Plan extends Model
 {
+
+    protected $fillable = [
+        'name',
+        'description',
+        'price',
+        'task_limit',
+    ];
     public function users() : HasMany {
         return $this->hasMany(User::class);
     }

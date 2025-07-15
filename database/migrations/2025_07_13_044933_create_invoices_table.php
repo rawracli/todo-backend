@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->string('invoice_number');
-            $table->string('snap_token')->nullable();
+            $table->string('invoice_number')->unique();
             $table->string('pdf_url')->nullable();
             $table->timestamps();
         });
