@@ -13,7 +13,7 @@ class SubTask extends Model
         'status',
         'task_id',
     ];
-    public function tasks() : BelongsTo {
+    public function task() : BelongsTo {
         return $this->belongsTo(Task::class);
     }
 }

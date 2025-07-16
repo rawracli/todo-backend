@@ -13,6 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            PlanSeeder::class,
+        ]);
         // User::factory(10)->create();
 
         // User::factory()->create([
@@ -34,8 +37,5 @@ class DatabaseSeeder extends Seeder
             'is_admin' => false,
         ]);
 
-        $this->call([
-            PlanSeeder::class,
-        ]);
     }
 }

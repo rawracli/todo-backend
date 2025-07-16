@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Task extends Model
 {
     protected $fillable = [
-        'name',
+        'title',
         'description',
         'video',
         'image',

@@ -14,7 +14,7 @@ class Order extends Model
         'amount',
         'status'
     ];
-    public function users() : BelongsTo {
+    public function user() : BelongsTo {
         return $this->belongsTo(User::class);
     }
     public function plans() : BelongsTo {
