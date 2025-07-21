@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -17,7 +18,7 @@ class TaskController extends Controller
         // Validasi limit task berdasarkan plan pengguna
         $user = auth()->user();
 
-        $tasks = $user->tasks()->get();
+        $tasks = $user->tasks()->with('category')->get();
         return response()->json($tasks);
     }
 
@@ -41,6 +42,8 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'video' => 'nullable|string',
             'image' => 'nullable|mimes:jpeg,png,jpg,svg|max:2048',
+            'category_id' => 'nullable|integer|exists:categories,id',
+            'tag' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -51,7 +54,23 @@ class TaskController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'video' => $request->video ?? null,
+            'category_id' => $request->category_id,
         ]);
+
+        $inputTags = explode(' ', $request->tag);
+        $tagIds = [];
+
+        foreach ($inputTags as $tag) {
+            // Hapus # dan spasi
+            $cleanTag = ltrim(trim($tag), '#');
+
+            if (!empty($cleanTag)) {
+                $tagModel = Tag::firstOrCreate(['title' => $cleanTag], ['user_id' => auth()->id()]);
+                $tagIds[] = $tagModel->id;
+            }
+        }
+        //many to many
+        $task->tags()->sync($tagIds);
 
         $image = $request->file('image');
         if ($image) {
@@ -106,13 +125,29 @@ class TaskController extends Controller
             'description' => 'sometimes|nullable|string',
             'video' => 'sometimes|nullable|string',
             'image' => 'sometimes|nullable|mimes:jpeg,png,jpg,svg|max:2048',
+            'category_id' => 'nullable|integer|exists:categories,id',
+            'tag' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
+        $task->update($request->only(['title', 'description', 'video', 'category_id']));
 
-        $task->update($request->only(['title', 'description', 'video']));
+        $inputTags = explode(' ', $request->tag);
+        $tagIds = [];
+        foreach ($inputTags as $tag) {
+            // Hapus # dan spasi
+            $cleanTag = ltrim(trim($tag), '#');
+
+            if (!empty($cleanTag)) {
+                $tagModel = Tag::firstOrCreate(['title' => $cleanTag], ['user_id' => auth()->id()]);
+                $tagIds[] = $tagModel->id;
+            }
+        }
+        //many to many
+        $task->tags()->sync($tagIds);
+
         $image = $request->file('image');
         // dd($request->all());
         if ($image) {
@@ -125,13 +160,14 @@ class TaskController extends Controller
 
         $data = $task;
         $data['image'] = $task->image == null ? null : asset($task->image);
+        Tag::doesntHave('tasks')->delete();
         return response()->json($data);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-     public function destroy(string $id)
+    public function destroy(string $id)
     {
         // Pastikan task ini milik pengguna yang login
         $user = auth()->user();
@@ -144,6 +180,8 @@ class TaskController extends Controller
         }
 
         $task->delete();
+        //delet tag gak terpakai
+        Tag::doesntHave('tasks')->delete();
         return response()->json(['message' => 'Task deleted successfully']);
 
     }

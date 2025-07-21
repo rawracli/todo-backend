@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\TagController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\SubTaskController;
 use App\Http\Controllers\Api\V1\OrderController;
@@ -43,6 +45,11 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('subtasks', SubtaskController::class)->only(['index', 'store', 'destroy']);
         Route::post('subtasks', [SubtaskController::class, 'store']); // CREATE
         Route::post('subtasks/{id}', [SubtaskController::class, 'update']); // UPDATE
+        Route::apiResource('categories', CategoryController::class)->only(['index', 'show', 'destroy']);
+        Route::post('categories', [CategoryController::class, 'store']); // CREATE
+        Route::post('categories/{id}', [CategoryController::class, 'update']); // UPDATE
+        Route::apiResource('tags', TagController::class)->only(['index', 'show', 'destroy']);
+        Route::post('tags/{id}', [TagController::class, 'update']); // UPDATE
         Route::apiResource('orders', OrderController::class)->only(['index', 'store', 'show', 'destroy']);
         Route::apiResource('payments', PaymentController::class)->only(['index', 'store', 'show']);
     });

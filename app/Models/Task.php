@@ -18,7 +18,7 @@ class Task extends Model
         'category_id'
     ];
 
-    public function user() {
+    public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
 
@@ -28,7 +28,7 @@ class Task extends Model
     }
 
     public function tags() : BelongsToMany {
-        return $this->belongsToMany(Tag::class, 'tag_todo');
+        return $this->belongsToMany(Tag::class, 'tag_tasks');
     }
 
     public function subTasks() : HasMany {

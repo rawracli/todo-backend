@@ -59,6 +59,12 @@ class User extends Authenticatable
     public function orders():HasMany {
         return $this->hasMany(Order::class);
     }
+    public function categories():HasMany {
+        return $this->hasMany(Category::class);
+    }
+    public function tags():HasMany {
+        return $this->hasMany(Tag::class);
+    }
     public function plan() : BelongsTo {
         return $this->belongsTo(Plan::class);
     }

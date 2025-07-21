@@ -17,7 +17,7 @@ class Order extends Model
     public function user() : BelongsTo {
         return $this->belongsTo(User::class);
     }
-    public function plans() : BelongsTo {
+    public function plan() : BelongsTo {
         return $this->belongsTo(Plan::class);
     }
     public function invoice() : HasOne {

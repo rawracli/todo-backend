@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tag extends Model
 {
+    protected $fillable = [
+        'title',
+        'user_id'
+    ];
     public function tasks() : BelongsToMany {
-        return $this->belongsToMany(Task::class, table: 'tag_todo');
+        return $this->belongsToMany(Task::class, 'tag_tasks');
     }
 }
